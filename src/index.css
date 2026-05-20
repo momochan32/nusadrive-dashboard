@@ -114,3 +114,10 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: oklch(0.88 0.002 270); border-radius: 100px; }
 ::-webkit-scrollbar-thumb:hover { background: oklch(0.78 0.005 270); }
+
+/* Hide scrollbar utility (used for horizontally-scrolling tab strips, chip rows, etc.) */
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Safe-area padding for iOS notched devices */
+.safe-pb { padding-bottom: env(safe-area-inset-bottom); }

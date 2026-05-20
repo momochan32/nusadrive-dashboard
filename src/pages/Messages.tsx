@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Send, CheckCircle2 } from 'lucide-react'
+import { Send, CheckCircle2, ArrowLeft } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -61,12 +61,12 @@ function ChatBubble({ msg }: { msg: ChatMessage }) {
   return (
     <div className={cn('flex gap-2 mb-3', isMe && 'justify-end')}>
       <div className={cn(
-        'max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
+        'max-w-[80%] sm:max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
         isMe
           ? 'bg-primary text-white rounded-br-sm'
           : 'bg-white border border-border text-foreground rounded-bl-sm shadow-sm'
       )}>
-        <p className="leading-relaxed">{msg.text}</p>
+        <p className="leading-relaxed whitespace-pre-wrap break-words">{msg.text}</p>
         <p className={cn('text-[10px] mt-1', isMe ? 'text-white/60' : 'text-muted-foreground')}>
           {formatTime(msg.time)}
         </p>
@@ -77,18 +77,23 @@ function ChatBubble({ msg }: { msg: ChatMessage }) {
 
 export default function Messages() {
   const [threads, setThreads] = useState<MessageThread[]>(messageThreads)
-  const [activeId, setActiveId] = useState<string>(messageThreads[0].id)
+  const [activeId, setActiveId] = useState<string | null>(null)
   const [compose, setCompose] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
 
-  const active = threads.find(t => t.id === activeId)
+  const active = activeId ? threads.find(t => t.id === activeId) : null
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [activeId, threads])
 
+  function selectThread(id: string) {
+    setActiveId(id)
+    setThreads(prev => prev.map(th => th.id === id ? { ...th, unreadCount: 0 } : th))
+  }
+
   function handleSend() {
-    if (!compose.trim()) return
+    if (!compose.trim() || !activeId) return
     const now = new Date().toISOString()
     const newMsg: ChatMessage = { id: `m-${Date.now()}`, sender: 'me', text: compose.trim(), time: now }
     setThreads(prev => prev.map(t => t.id === activeId
@@ -99,9 +104,12 @@ export default function Messages() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-7.5rem)] gap-0 overflow-hidden rounded-xl border border-border bg-white shadow-[0_3px_12px_rgba(27,43,107,0.08)]">
-      {/* Thread List */}
-      <div className="w-72 xl:w-80 shrink-0 flex flex-col border-r border-border">
+    <div className="flex h-[calc(100vh-7rem)] sm:h-[calc(100vh-7.5rem)] overflow-hidden rounded-xl border border-border bg-white shadow-[0_3px_12px_rgba(27,43,107,0.08)]">
+      {/* Thread List — hidden on mobile when chat open */}
+      <div className={cn(
+        'flex flex-col border-r border-border w-full md:w-72 xl:w-80 md:shrink-0',
+        active && 'hidden md:flex'
+      )}>
         <div className="px-4 py-3.5 border-b border-border">
           <h2 className="text-sm font-bold">Pesan</h2>
           <p className="text-xs text-muted-foreground mt-0.5">{threads.reduce((s, t) => s + t.unreadCount, 0)} pesan belum dibaca</p>
@@ -112,10 +120,7 @@ export default function Messages() {
               key={t.id}
               thread={t}
               isActive={t.id === activeId}
-              onClick={() => {
-                setActiveId(t.id)
-                setThreads(prev => prev.map(th => th.id === t.id ? { ...th, unreadCount: 0 } : th))
-              }}
+              onClick={() => selectThread(t.id)}
             />
           ))}
         </ScrollArea>
@@ -125,7 +130,14 @@ export default function Messages() {
       {active ? (
         <div className="flex-1 flex flex-col min-w-0">
           {/* Chat Header */}
-          <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border shrink-0">
+          <div className="flex items-center gap-3 px-4 sm:px-5 py-3.5 border-b border-border shrink-0">
+            <button
+              onClick={() => setActiveId(null)}
+              className="md:hidden p-1.5 -ml-1 rounded-lg text-foreground hover:bg-muted cursor-pointer"
+              aria-label="Kembali ke daftar"
+            >
+              <ArrowLeft className="size-5" />
+            </button>
             <Avatar className="h-9 w-9">
               <AvatarImage src={active.hostAvatarUrl} />
               <AvatarFallback>{active.hostName.split(' ').map(n => n[0]).join('').slice(0, 2)}</AvatarFallback>
@@ -133,20 +145,20 @@ export default function Messages() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <p className="text-sm font-bold truncate">{active.hostName}</p>
-                {active.isVerified && <Badge variant="success" className="text-[10px]">Verified</Badge>}
+                {active.isVerified && <Badge variant="success" className="text-[10px] shrink-0">Verified</Badge>}
               </div>
-              {active.bikeName && <p className="text-[10px] text-muted-foreground">{active.bikeName}</p>}
+              {active.bikeName && <p className="text-[10px] text-muted-foreground truncate">{active.bikeName}</p>}
             </div>
           </div>
 
           {/* Messages */}
-          <ScrollArea className="flex-1 p-5">
+          <ScrollArea className="flex-1 p-4 sm:p-5">
             {active.messages.map(msg => <ChatBubble key={msg.id} msg={msg} />)}
             <div ref={bottomRef} />
           </ScrollArea>
 
           {/* Composer */}
-          <div className="flex items-center gap-2 px-4 py-3 border-t border-border shrink-0">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-3 border-t border-border shrink-0 safe-pb">
             <Input
               placeholder="Ketik pesan..."
               value={compose}
@@ -165,7 +177,7 @@ export default function Messages() {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
+        <div className="hidden md:flex flex-1 items-center justify-center text-muted-foreground text-sm">
           Pilih percakapan untuk mulai membalas
         </div>
       )}

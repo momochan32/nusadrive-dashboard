@@ -155,8 +155,8 @@ function StockTab() {
                     <div key={v.id} className="flex items-center gap-2.5">
                       <span className={cn('w-2 h-2 rounded-full shrink-0', statusColor[v.status])} />
                       <span className="text-sm font-medium flex-1 truncate">{v.name}</span>
-                      <span className="text-xs text-muted-foreground">{v.location}</span>
-                      <span className="text-xs font-bold">{formatIDR(v.pricePerDay)}<span className="font-normal text-muted-foreground">/hr</span></span>
+                      <span className="text-xs text-muted-foreground hidden sm:inline">{v.location}</span>
+                      <span className="text-xs font-bold whitespace-nowrap">{formatIDR(v.pricePerDay)}<span className="font-normal text-muted-foreground">/hr</span></span>
                     </div>
                   ))}
                 </div>
@@ -269,7 +269,7 @@ export default function Fleet() {
             </TabsTrigger>
           </TabsList>
           <div className="sm:ml-auto flex gap-2">
-            <Button className="gap-2">
+            <Button className="gap-2 w-full sm:w-auto">
               <Plus className="size-4" /> Tambah Kendaraan
             </Button>
           </div>
@@ -310,7 +310,7 @@ export default function Fleet() {
             <span className="ml-auto text-sm text-muted-foreground self-center">{filtered.length} kendaraan</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
             {filtered.map(vehicle => (
               <Card key={vehicle.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
                 <div className="relative">

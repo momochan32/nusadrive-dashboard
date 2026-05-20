@@ -66,8 +66,8 @@ export default function Analytics() {
       </div>
 
       {/* Revenue Chart + Status Pie */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        <Card className="xl:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <Card className="lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle>Revenue Trend — 30 Hari</CardTitle>
@@ -123,7 +123,7 @@ export default function Analytics() {
       </div>
 
       {/* Vehicle Revenue + Area Table */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Top Vehicles by Revenue */}
         <Card>
           <CardHeader>

@@ -38,7 +38,7 @@ export default function Overview() {
       )}
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatsCard
           label="Total Armada"
           value={stats.totalVehicles}
@@ -71,9 +71,9 @@ export default function Overview() {
       </div>
 
       {/* Chart + Top Vehicles */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Revenue Chart */}
-        <Card className="xl:col-span-2">
+        <Card className="lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle>Revenue — 14 Hari Terakhir</CardTitle>
@@ -149,9 +149,9 @@ export default function Overview() {
       </div>
 
       {/* Recent Bookings + Recent Customers */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Recent Bookings */}
-        <Card className="xl:col-span-2">
+        <Card className="lg:col-span-2">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Booking Terbaru</CardTitle>

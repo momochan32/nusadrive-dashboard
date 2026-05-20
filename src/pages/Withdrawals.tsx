@@ -145,7 +145,7 @@ export default function Withdrawals() {
               </div>
               <CardContent className="p-0">
                 {filtered.length > 0 ? filtered.map((w, i) => (
-                  <div key={w.id} className={`flex flex-col md:grid md:grid-cols-[1fr_140px_120px_120px_120px_40px] gap-3 md:gap-4 items-start md:items-center py-4 px-5 ${i < filtered.length - 1 ? 'border-b border-border' : ''}`}>
+                  <div key={w.id} className={`flex flex-col md:grid md:grid-cols-[1fr_140px_120px_120px_120px_40px] gap-3 md:gap-4 items-stretch md:items-center py-4 px-4 sm:px-5 ${i < filtered.length - 1 ? 'border-b border-border' : ''}`}>
                     {/* Mitra */}
                     <div className="flex items-center gap-3 min-w-0">
                       <Avatar className="h-9 w-9 shrink-0 rounded-xl">
@@ -153,69 +153,83 @@ export default function Withdrawals() {
                           {w.businessName.split(' ').map(x => x[0]).join('').slice(0, 2)}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <Link to={`/mitra/${w.mitraId}`}>
                           <p className="text-sm font-semibold hover:text-accent transition-colors truncate">{w.businessName}</p>
                         </Link>
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap">
                           <Building2 className="size-3 shrink-0" />
                           <span>{w.bankName} •• {w.bankAccount.slice(-4)}</span>
                           <span>·</span>
                           <span>{w.totalOrders} order</span>
                         </div>
                         {w.note && (
-                          <p className="text-[10px] text-red-500 mt-0.5 truncate">{w.note}</p>
+                          <p className="text-[10px] text-red-500 mt-0.5">{w.note}</p>
                         )}
+                      </div>
+                      {/* Mobile-only status pill */}
+                      <div className="md:hidden shrink-0">
+                        <WithdrawalStatusBadge status={w.status} />
                       </div>
                     </div>
 
                     {/* Period */}
-                    <div>
-                      <p className="text-sm font-medium">{w.period}</p>
-                      <p className="text-[10px] text-muted-foreground">Req: {formatDate(w.requestedAt)}</p>
+                    <div className="flex items-baseline justify-between md:block">
+                      <span className="md:hidden text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Periode</span>
+                      <div className="text-right md:text-left">
+                        <p className="text-sm font-medium">{w.period}</p>
+                        <p className="text-[10px] text-muted-foreground">Req: {formatDate(w.requestedAt)}</p>
+                      </div>
                     </div>
 
                     {/* Amount */}
-                    <div className="text-right">
-                      <p className="text-sm font-bold">{formatIDR(w.netAmount)}</p>
-                      <p className="text-[10px] text-muted-foreground">Bruto: {formatIDR(w.amount)}</p>
+                    <div className="flex items-baseline justify-between md:block md:text-right">
+                      <span className="md:hidden text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Jumlah</span>
+                      <div className="text-right">
+                        <p className="text-sm font-bold">{formatIDR(w.netAmount)}</p>
+                        <p className="text-[10px] text-muted-foreground">Bruto: {formatIDR(w.amount)}</p>
+                      </div>
                     </div>
 
                     {/* Commission */}
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-primary">{formatIDR(w.commission)}</p>
+                    <div className="flex items-baseline justify-between md:block md:text-right">
+                      <span className="md:hidden text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Komisi 15%</span>
+                      <p className="text-sm font-semibold text-primary text-right">{formatIDR(w.commission)}</p>
                     </div>
 
                     {/* Status + Actions */}
-                    <div className="flex flex-col gap-2">
-                      <WithdrawalStatusBadge status={w.status} />
+                    <div className="flex md:flex-col md:gap-2 items-center md:items-start justify-between md:justify-start pt-2 md:pt-0 border-t md:border-0 border-border">
+                      {/* Desktop-only status badge (mobile shows it next to mitra) */}
+                      <div className="hidden md:block">
+                        <WithdrawalStatusBadge status={w.status} />
+                      </div>
                       {w.status === 'pending' && (
-                        <div className="flex gap-1.5">
+                        <div className="flex gap-3 md:gap-1.5 ml-auto md:ml-0">
                           <button
                             onClick={() => approveWithdrawal(w.id)}
-                            className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:text-emerald-700 cursor-pointer"
+                            className="flex items-center gap-1 text-xs md:text-[10px] font-bold text-emerald-600 hover:text-emerald-700 cursor-pointer"
                           >
-                            <CheckCircle2 className="size-3" /> Setuju
+                            <CheckCircle2 className="size-3.5 md:size-3" /> Setuju
                           </button>
-                          <span className="text-muted-foreground">·</span>
+                          <span className="text-muted-foreground hidden md:inline">·</span>
                           <button
                             onClick={() => rejectWithdrawal(w.id)}
-                            className="flex items-center gap-1 text-[10px] font-bold text-red-500 hover:text-red-600 cursor-pointer"
+                            className="flex items-center gap-1 text-xs md:text-[10px] font-bold text-red-500 hover:text-red-600 cursor-pointer"
                           >
-                            <XCircle className="size-3" /> Tolak
+                            <XCircle className="size-3.5 md:size-3" /> Tolak
                           </button>
                         </div>
                       )}
                       {w.status === 'approved' && (
                         <button
                           onClick={() => markTransferred(w.id)}
-                          className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700 cursor-pointer"
+                          className="flex items-center gap-1 text-xs md:text-[10px] font-bold text-blue-600 hover:text-blue-700 cursor-pointer ml-auto md:ml-0"
                         >
-                          <ArrowUpRight className="size-3" /> Tandai Transfer
+                          <ArrowUpRight className="size-3.5 md:size-3" /> Tandai Transfer
                         </button>
                       )}
                       {w.transferredAt && (
-                        <p className="text-[10px] text-muted-foreground">Transfer: {formatDate(w.transferredAt)}</p>
+                        <p className="text-[10px] text-muted-foreground ml-auto md:ml-0">Transfer: {formatDate(w.transferredAt)}</p>
                       )}
                     </div>
 

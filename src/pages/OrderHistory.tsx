@@ -61,14 +61,14 @@ export default function OrderHistory() {
         <SummaryChip label="Selesai" value={totalCompleted} />
         <SummaryChip label="Dibatalkan" value={totalCancelled} />
         <SummaryChip label="Total Revenue" value={formatIDR(totalRevenue)} accent />
-        <Button variant="outline" className="gap-2 ml-auto self-center">
+        <Button variant="outline" className="gap-2 sm:ml-auto self-center w-full sm:w-auto">
           <Download className="size-4" /> Export CSV
         </Button>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3">
-        <div className="relative flex-1 min-w-48">
+      <div className="flex flex-wrap gap-2 sm:gap-3">
+        <div className="relative w-full sm:flex-1 sm:min-w-48">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <Input
             placeholder="Cari kode, pelanggan, kendaraan..."
@@ -78,7 +78,7 @@ export default function OrderHistory() {
           />
         </div>
         <Select value={statusFilter} onValueChange={v => setStatusFilter(v as TripStatus | 'all')}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="flex-1 min-w-32 sm:w-40 sm:flex-none">
             <SelectValue placeholder="Semua Status" />
           </SelectTrigger>
           <SelectContent>
@@ -90,7 +90,7 @@ export default function OrderHistory() {
           </SelectContent>
         </Select>
         <Select value={mitraFilter} onValueChange={setMitraFilter}>
-          <SelectTrigger className="w-48">
+          <SelectTrigger className="flex-1 min-w-32 sm:w-48 sm:flex-none">
             <SelectValue placeholder="Semua Mitra" />
           </SelectTrigger>
           <SelectContent>
@@ -100,10 +100,10 @@ export default function OrderHistory() {
             ))}
           </SelectContent>
         </Select>
-        <div className="flex items-center gap-2">
-          <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="w-36 text-sm" />
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="flex-1 sm:w-36 text-sm" />
           <span className="text-muted-foreground text-sm">–</span>
-          <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="w-36 text-sm" />
+          <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="flex-1 sm:w-36 text-sm" />
         </div>
         {(search || statusFilter !== 'all' || mitraFilter !== 'all' || dateFrom || dateTo) && (
           <Button variant="ghost" size="sm" className="text-muted-foreground"

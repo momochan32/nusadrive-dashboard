@@ -143,8 +143,8 @@ export default function Mitra() {
       )}
 
       {/* Toolbar */}
-      <div className="flex gap-3">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1 sm:max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <Input
             placeholder="Cari nama bisnis atau pemilik..."
@@ -153,7 +153,7 @@ export default function Mitra() {
             className="pl-9"
           />
         </div>
-        <Button className="gap-2 ml-auto">
+        <Button className="gap-2 sm:ml-auto w-full sm:w-auto">
           <Plus className="size-4" /> Undang Mitra
         </Button>
       </div>
@@ -178,7 +178,7 @@ export default function Mitra() {
         {(['all', ...allStatuses] as const).map(s => (
           <TabsContent key={s} value={s}>
             {filtered.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filtered.map(m => <MitraCard key={m.id} mitra={m} />)}
               </div>
             ) : (

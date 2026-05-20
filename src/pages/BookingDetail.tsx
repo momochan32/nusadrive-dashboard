@@ -37,19 +37,19 @@ export default function BookingDetail() {
   return (
     <div className="max-w-4xl space-y-5">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <Button variant="outline" size="icon" asChild>
+      <div className="flex items-start gap-3 flex-wrap">
+        <Button variant="outline" size="icon" asChild className="shrink-0">
           <Link to="/bookings"><ArrowLeft className="size-4" /></Link>
         </Button>
-        <div className="flex-1">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h2 className="text-lg font-extrabold">{trip.bookingCode}</h2>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-base sm:text-lg font-extrabold">{trip.bookingCode}</h2>
             <TripStatusBadge status={trip.status} />
           </div>
           <p className="text-xs text-muted-foreground mt-0.5">Dibuat {formatDate(trip.createdAt)}</p>
         </div>
         {trip.status === 'upcoming' && (
-          <Button variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/5">
+          <Button variant="outline" className="text-destructive border-destructive/30 hover:bg-destructive/5 w-full sm:w-auto">
             Batalkan Booking
           </Button>
         )}
@@ -73,8 +73,8 @@ export default function BookingDetail() {
                 </div>
               </div>
             </div>
-            <CardContent className="p-5">
-              <div className="grid grid-cols-4 gap-3 text-center">
+            <CardContent className="p-4 sm:p-5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 text-center">
                 {[
                   { label: 'Transmisi', value: trip.vehicle.transmission },
                   { label: 'Engine', value: trip.vehicle.engineCc },

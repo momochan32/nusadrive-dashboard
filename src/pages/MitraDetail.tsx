@@ -46,13 +46,13 @@ export default function MitraDetail() {
   return (
     <div className="max-w-5xl space-y-5">
       {/* Header */}
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 flex-wrap">
         <Button variant="outline" size="icon" asChild className="shrink-0">
           <Link to="/mitra"><ArrowLeft className="size-4" /></Link>
         </Button>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h2 className="text-lg font-extrabold">{mitra.businessName}</h2>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-base sm:text-lg font-extrabold truncate max-w-full">{mitra.businessName}</h2>
             <MitraStatusBadge status={status ?? mitra.status} />
           </div>
           <p className="text-xs text-muted-foreground mt-0.5">
@@ -60,18 +60,18 @@ export default function MitraDetail() {
             {mitra.approvedAt && ` · Disetujui ${formatDate(mitra.approvedAt)}`}
           </p>
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 w-full sm:w-auto sm:shrink-0">
           {isPending && (
             <>
               <Button
-                className="gap-2"
+                className="gap-2 flex-1 sm:flex-none"
                 onClick={() => setStatus('active')}
               >
                 <CheckCircle2 className="size-4" /> Setujui
               </Button>
               <Button
                 variant="outline"
-                className="gap-2 text-destructive border-destructive/30 hover:bg-destructive/5"
+                className="gap-2 text-destructive border-destructive/30 hover:bg-destructive/5 flex-1 sm:flex-none"
                 onClick={() => setStatus('rejected')}
               >
                 <XCircle className="size-4" /> Tolak
@@ -81,14 +81,14 @@ export default function MitraDetail() {
           {isActive && (
             <Button
               variant="outline"
-              className="gap-2 text-destructive border-destructive/30 hover:bg-destructive/5"
+              className="gap-2 text-destructive border-destructive/30 hover:bg-destructive/5 w-full sm:w-auto"
               onClick={() => setStatus('suspended')}
             >
               <ShieldX className="size-4" /> Tangguhkan
             </Button>
           )}
           {isSuspended && (
-            <Button className="gap-2" onClick={() => setStatus('active')}>
+            <Button className="gap-2 w-full sm:w-auto" onClick={() => setStatus('active')}>
               <ShieldCheck className="size-4" /> Aktifkan Kembali
             </Button>
           )}
